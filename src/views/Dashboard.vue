@@ -27,13 +27,7 @@
     <!-- snackbar notifier -->
     <v-snackbar v-model="snackbar">
       You have selected {{ selectedEmployee.name}} ({{selectedEmployee.title}})
-      <v-btn
-        color="pink"
-        text
-        @click="snackbar = false"
-      >
-        Close
-      </v-btn>
+      <v-btn color="pink" text @click="snackbar = false">Close </v-btn>
     </v-snackbar>
   </v-container>
 </template>
