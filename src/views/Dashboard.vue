@@ -3,7 +3,7 @@
     <h1>Dashboard</h1>
     <!-- sales graphs -->
     <v-row>
-      <v-col v-for="sale in sales" :key="`${sale.title}`">
+      <v-col v-for="sale in sales" :key="`${sale.title}`" cols="12" md="4">
         <SalesGraph
           :sale="sale"
         ></SalesGraph>
@@ -11,21 +11,22 @@
     </v-row>
      <!-- statistic cards -->
     <v-row>
-      <v-col v-for="statistic in statistics" :key="`${statistic.title}`">
+      <v-col v-for="statistic in statistics" :key="`${statistic.title}`" cols="12" md="6" lg="3">
         <StatisticCard :statistic="statistic" />
       </v-col>
     </v-row>    
     <!-- employees table and event timeline -->
     <v-row>
-      <v-col cols="8">
+      <v-col cols="12" md="8">
         <EmployeesTable :employees="employees" @select-employee="setEmployee" />
       </v-col>
-      <v-col cols="4">
+      <v-col cols="12" md="4">
         <EventTimeline :timeline="timeline" />
       </v-col>
     </v-row>        
     <!-- snackbar notifier -->
-    <v-snackbar v-model="snackbar">
+    <!-- $vuetify.breakpoint gives access to all of the breakpoints currently available on that instance of Vuetify -->
+    <v-snackbar v-model="snackbar" :left="$vuetify.breakpoint.lgAndUp">
       You have selected {{ selectedEmployee.name}} ({{selectedEmployee.title}})
       <v-btn color="pink" text @click="snackbar = false">Close </v-btn>
     </v-snackbar>
@@ -53,6 +54,7 @@ export default {
   },
   data() {
     return {
+      //isMobile: false, //a reactive data property to track whether the user is on a mobile device
       employees: employeesData,
       sales: salesData,
       statistics: statisticsData,
@@ -64,12 +66,28 @@ export default {
       }
     };
   },
+  //   mounted() {
+  //     // Check whether the user's device is mobile or not
+  //     this.onResize();
+  //     // Create resize event to check for mobile device
+  //     window.addEventListener("resize", this.onResize, { passive: true });
+  //   },
+  //   beforeDestroy() {
+  //     if (typeof window !== "undefined") {
+  //       // Remove the resize event when the component is destroyed
+  //       window.removeEventListener("resize", this.onResize, { passive: true });
+  //     }
+  //   },
   methods: {
     setEmployee(event) {
       this.snackbar = true;
       this.selectedEmployee.name = event.name;
       this.selectedEmployee.title = event.title;
     }
+    // onResize() {
+    //   // Set reactive data property to true if device is less than 600 pixels
+    //   this.isMobile = window.innerWidth < 600;
+    // }
   }
 };
 </script>
