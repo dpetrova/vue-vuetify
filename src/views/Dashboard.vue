@@ -23,7 +23,29 @@
       <v-col cols="12" md="4">
         <EventTimeline :timeline="timeline" />
       </v-col>
-    </v-row>        
+    </v-row>
+
+    <!-- content that is not visible within the user’s viewport -->
+    <v-row id="below-the-fold" v-intersect="showMoreContent">
+      <v-col cols="12" md="8">
+        <EmployeesTable :employees="employees" @select-employee="setEmployee" />
+      </v-col>
+      <v-col cols="12" md="4">
+        <EventTimeline :timeline="timeline" />
+      </v-col>
+    </v-row>
+
+    <!-- skeleton loader component, which allows to scaffold a contextual loading state for users -->
+    <v-row id="more-content" v-if="loadNewContent">
+      <v-col>
+        <v-skeleton-loader
+          ref="skeleton"
+          type="table"
+          class="mx-auto"
+        ></v-skeleton-loader>
+      </v-col>
+    </v-row>
+
     <!-- snackbar notifier -->
     <!-- $vuetify.breakpoint gives access to all of the breakpoints currently available on that instance of Vuetify -->
     <v-snackbar v-model="snackbar" :left="$vuetify.breakpoint.lgAndUp">
@@ -63,7 +85,8 @@ export default {
       selectedEmployee: {
         name: "",
         title: ""
-      }
+      },
+      loadNewContent: false
     };
   },
   //   mounted() {
@@ -83,11 +106,20 @@ export default {
       this.snackbar = true;
       this.selectedEmployee.name = event.name;
       this.selectedEmployee.title = event.title;
-    }
+    },
     // onResize() {
     //   // Set reactive data property to true if device is less than 600 pixels
     //   this.isMobile = window.innerWidth < 600;
-    // }
+    // },
+    showMoreContent(entries) {
+      //console.log(entries);
+      //v-intersect use the standard Intersection Observer API
+      //which provides an array of elements being observed as one of the default parameters
+      //and for each observed entry, it ha s a property isIntersecting
+      //which returns boolean based on whether the observed entry is currently intersecting or not
+      //so skeleton element component only loads once the user goes past the #below-the-fold row
+      this.loadNewContent = entries[0].isIntersecting;
+    }
   }
 };
 </script>
