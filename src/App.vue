@@ -11,7 +11,11 @@
         :to="link.url"
       >
       {{link.label}}
-      </v-btn>      
+      </v-btn>
+      <!-- to toggle light/dark theme -->
+      <v-btn @click="toggleTheme" text rounded>
+        Toggle Theme
+      </v-btn>     
     </v-app-bar>
     <v-main>
       <router-view></router-view>
@@ -59,6 +63,14 @@ export default {
         url: "/dashboard"
       }
     ]
-  })
+  }),
+  methods: {
+    toggleTheme() {
+      //change anchor color in dark theme
+      this.$vuetify.theme.themes.dark.anchor = "#41B883";
+      //toggle between light/dark theme
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    }
+  }
 };
 </script>
